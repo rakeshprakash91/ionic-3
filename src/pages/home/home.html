@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Dashboard</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-header>
+      Relationship Manager
+    </ion-card-header>
+    <ion-card-content>
+      Let's you schedule calls with dear ones. You will be notified at the scheduled time.
+      <div>
+        <button ion-button color="primary" round outline (click)="navigateToRelationshipManager()">Start</button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      NSE Ban List
+    </ion-card-header>
+    <ion-card-content>
+      <div>
+        <button *ngIf="!banList" ion-button color="primary" round outline (click)="downloadBanList()">Download Now</button>
+      </div>
+      <div *ngIf="banList">
+        {{banList}}
+        <div>
+          <button ion-button color="danger" round outline (click)="banList = ''">Clear</button>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      Location Manager
+    </ion-card-header>
+    <ion-card-content>
+      Set location based reminders, define home, office and create a geofence.
+      <div>
+        <button ion-button color="primary" round outline (click)="navigateToLocationManager()">Start</button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <!-- <app-location-component></app-location-component> -->
+</ion-content>

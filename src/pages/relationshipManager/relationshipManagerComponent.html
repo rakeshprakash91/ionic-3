@@ -1,0 +1,46 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Relationship Manager</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-card>
+        <ion-card-header>
+            <a (click)="goToList()">View Scheduled Calls</a>
+        </ion-card-header>
+    </ion-card>
+    <ion-card>
+        <ion-card-content>
+            <ion-list>
+                <ion-item>
+                    <ion-label floating>Search Contact</ion-label>
+                    <ion-input type="text" [(ngModel)]="contactName"></ion-input>
+                </ion-item>
+            </ion-list>
+            <button ion-button round color="primary" outline (click)="searchContact()">Search</button>
+        </ion-card-content>
+    </ion-card>
+    <ion-card *ngIf="searchResult">
+        <ion-card-header>
+            Search Result
+            <div *ngIf="isTruncated" small> Showing only top 5</div>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-card *ngFor="let contact of searchResult">
+                <ion-card-header>
+                    {{contact.name}}
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-list>
+                        <ion-item *ngFor="let number of contact.phoneNumber" (click)="selectNumber(number, contact.name)">
+                            <ion-label>
+                                {{number}}
+                            </ion-label>
+                        </ion-item>
+                    </ion-list>
+                </ion-card-content>
+            </ion-card>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

@@ -1,0 +1,35 @@
+<ion-card>
+    <ion-card-header>
+        Current Location Details
+    </ion-card-header>
+    <ion-card-content>
+        <div *ngIf="location;else no_location">
+            {{location}}
+        </div>
+        <ng-template #no_location>
+            Location details not available. Please click on Start Tracking.
+        </ng-template>
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <div>Start Tracking</div>
+                </ion-col>
+                <ion-col>
+                    <div>Stop Tracking</div>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <div>
+                        <button ion-button round color="primary" outline (click)="startLocationTracking()">Start</button>
+                    </div>
+                </ion-col>
+                <ion-col>
+                    <div>
+                        <button ion-button round outline color="danger" (click)="stopGeoTracking()">Stop</button>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card-content>
+</ion-card>
