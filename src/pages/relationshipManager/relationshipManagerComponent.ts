@@ -2,75 +2,105 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Contacts, Contact, ContactField, ContactName } from '@ionic-native/contacts';
 import { SchedulerComponent } from '../scheduler/schedulerComponent';
-import { ScheduleListComponent } from '../scheduleList/scheduleList.component';
+import { LocalNotifications } from '@ionic-native/local-notifications';
+import { CallNumber } from '@ionic-native/call-number';
+import { Toast } from '@ionic-native/toast';
+import { AlertController } from 'ionic-angular';
+import { SMS } from '@ionic-native/sms';
+import { SearchContactComponent } from '../searchContact/search.contact.component';
 
 @Component({
     selector: 'app-relationship-manager',
     templateUrl: 'relationshipManagerComponent.html'
 })
 export class RelationshipManagerComponent {
-    contactName: string;
-    searchResult: any;
-    isTruncated: boolean;
+    scheduleList = [];
     constructor(
         public navCtrl: NavController,
-        private contacts: Contacts,
-        private ref: ChangeDetectorRef
-    ) {
+        private ref: ChangeDetectorRef,
+        private localNotification: LocalNotifications,
+        private callNumber: CallNumber,
+        private toast: Toast,
+        private alertCtrl: AlertController,
+        private sms: SMS
+    ) { }
 
-    }
-    searchContact() {
-        this.contactName = this.contactName || 'Amma';
-        if (this.contactName) {
-            this.contacts.find(['displayName'], { 'filter': this.contactName }).then((res) => {
-                this.searchResult = this.processSearchResult(res);
-                this.ref.detectChanges();
-            }, (err) => {
-                console.log(err);
-            })
-        }
+    goToScheduler() {
+        this.navCtrl.push(SearchContactComponent);
     }
 
-
-    goToList() {
-        this.navCtrl.push(ScheduleListComponent);
-    }
-
-    selectNumber(phone: string, name: string) {
-        this.navCtrl.push(SchedulerComponent, {
-            name: name,
-            phone: phone
-        });
-    }
-
-    processSearchResult(contacts: Array<any>) {
-        let processedContacts = [];
-        this.isTruncated = false;
-        if (contacts.length > 5) {
-            this.isTruncated = true;
-            contacts.splice(5, contacts.length - 1);
-        }
-        contacts.forEach((item, index) => {
-            let contact = {
-                name: <string>null,
-                hasMultiple: <boolean>null,
-                phoneNumber: <any>null
-            };
-            contact.name = item.displayName;
-            contact.phoneNumber = [];
-            if (item.phoneNumbers.length > 1) {
-                contact.hasMultiple = true;
-                item.phoneNumbers.forEach((num, index) => {
-                    if (contact.phoneNumber.indexOf(num.value) === -1) {
-                        contact.phoneNumber.push(num.value.replace(/\s/g, ''));
+    smsConfirm(num: number) {
+        let prompt = this.alertCtrl.create({
+            title: 'Send SMS to ' + num,
+            message: "Enter message below",
+            inputs: [
+                {
+                    name: 'sms',
+                    placeholder: 'SMS'
+                },
+            ],
+            buttons: [
+                {
+                    text: 'Cancel',
+                    handler: data => {
+                        console.log('Cancel clicked');
                     }
-                });
-            } else {
-                contact.phoneNumber.push(item.phoneNumbers[0].value);
-            }
-            processedContacts.push(contact);
+                },
+                {
+                    text: 'Send',
+                    handler: data => {
+                        this.sms.send('' + num, data.sms);
+                    }
+                }
+            ]
         });
-        return processedContacts;
+        prompt.present();
     }
 
+    delete(id: number) {
+        this.localNotification.cancel(id).then(res => {
+            this.toast.show('Reminder deleted successfully', '2000', 'center').subscribe(res => {
+                console.log('success');
+            });
+            this.getAllCalls();
+        });
+    }
+
+    call(num: number, id: number) {
+        this.callNumber.callNumber('' + num, true).then(res => {
+            this.localNotification.cancel(id).then(res => {
+                this.getAllCalls();
+                this.smsConfirm(num);
+            });
+        });
+    }
+
+    edit(id: number) {
+        this.navCtrl.push(SchedulerComponent, {
+            id: id
+        })
+    }
+
+    processResult(res: any): any {
+        res.forEach(item => {
+            const date = new Date(item.trigger.at);
+            item.data = JSON.parse(item.data);
+            item.trigger.at = date.toDateString() + ' ' + date.toTimeString().substring(0, 5);
+        });
+        return res;
+    }
+
+    ionViewWillEnter() {
+        this.getAllCalls();
+    }
+
+    getAllCalls() {
+        this.localNotification.getAll().then((res) => {
+            this.scheduleList = this.processResult(res);
+            this.ref.detectChanges();
+            console.log(this.scheduleList);
+        }).catch((err) => {
+            console.error(err);
+        })
+    }
 }

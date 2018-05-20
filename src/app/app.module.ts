@@ -20,10 +20,10 @@ import { FilePath } from '@ionic-native/file-path';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { CallNumber } from '@ionic-native/call-number';
 import { Toast } from '@ionic-native/toast';
-import { ScheduleListComponent } from '../pages/scheduleList/scheduleList.component';
 import { SMS } from '@ionic-native/sms';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
 import { LocationManagerComponent } from '../pages/locationManager/location.manager.component';
+import { SearchContactComponent } from '../pages/searchContact/search.contact.component';
 
 @NgModule({
   declarations: [
@@ -34,8 +34,8 @@ import { LocationManagerComponent } from '../pages/locationManager/location.mana
     LocationComponent,
     SchedulerComponent,
     RelationshipManagerComponent,
-    ScheduleListComponent,
-    LocationManagerComponent
+    LocationManagerComponent,
+    SearchContactComponent
   ],
   imports: [
     BrowserModule,
@@ -51,8 +51,8 @@ import { LocationManagerComponent } from '../pages/locationManager/location.mana
     LocationComponent,
     SchedulerComponent,
     RelationshipManagerComponent,
-    ScheduleListComponent,
-    LocationManagerComponent
+    LocationManagerComponent,
+    SearchContactComponent
   ],
   providers: [
     SMS,

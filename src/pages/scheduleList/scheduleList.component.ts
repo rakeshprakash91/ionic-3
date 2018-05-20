@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Contacts, Contact, ContactField, ContactName } from '@ionic-native/contacts';
 import { SchedulerComponent } from '../scheduler/schedulerComponent';
@@ -9,11 +9,11 @@ import { AlertController } from 'ionic-angular';
 import { SMS } from '@ionic-native/sms';
 
 @Component({
-    selector: 'app-schedule-list',
+    selector: 'app-scheduled-call-list',
     templateUrl: 'scheduleList.component.html'
 })
-export class ScheduleListComponent implements OnInit {
-    scheduleList: any;
+export class ScheduleListComponent {
+    scheduleList = [];
     constructor(
         public navCtrl: NavController,
         private ref: ChangeDetectorRef,
@@ -26,8 +26,8 @@ export class ScheduleListComponent implements OnInit {
 
     smsConfirm(num: number) {
         let prompt = this.alertCtrl.create({
-            title: 'Send SMS',
-            message: "Enter message to be sent below",
+            title: 'Send SMS to ' + num,
+            message: "Enter message below",
             inputs: [
                 {
                     name: 'sms',
@@ -54,7 +54,7 @@ export class ScheduleListComponent implements OnInit {
 
     delete(id: number) {
         this.localNotification.cancel(id).then(res => {
-            this.toast.show('Reminder deleted successfully', '5000', 'center').subscribe(res => {
+            this.toast.show('Reminder deleted successfully', '2000', 'center').subscribe(res => {
                 console.log('success');
             });
             this.getAllCalls();
@@ -85,7 +85,8 @@ export class ScheduleListComponent implements OnInit {
         return res;
     }
 
-    ngOnInit() {
+    ionViewWillEnter() {
+        console.log('here in view before load')
         this.getAllCalls();
     }
 

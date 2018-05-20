@@ -107,8 +107,10 @@ export class SchedulerComponent {
         this.scheduleNotification(notificationTxt, selectedDate, this.notificationText);
 
         // Non intrusive alert.
-        this.toast.show(successMsg, '5000', 'center').subscribe(toast => {
-            console.log(toast);
+        this.toast.show(successMsg, '3000', 'center').subscribe(toast => {
+            setTimeout(() => {
+                this.navCtrl.popTo(this.navCtrl.getByIndex(1));
+            }, 3000);
         }, err => {
             console.log(err);
         });
