@@ -107,4 +107,6 @@
     <plugin name="cordova-plugin-x-toast" spec="^2.6.2" />
     <plugin name="cordova-sms-plugin" spec="^0.1.11" />
     <plugin name="cordova-plugin-nativegeocoder" spec="^3.1.1" />
+    <plugin name="cordova-plugin-tts" spec="^0.2.3" />
+    <plugin name="cordova-plugin-speechrecognition" spec="^1.2.0" />
 </widget>

@@ -4,6 +4,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { FilePath } from '@ionic-native/file-path';
 import { CallNumber } from '@ionic-native/call-number';
 import { Toast } from '@ionic-native/toast';
+import { TextToSpeech } from '@ionic-native/text-to-speech';
+
 
 @Component({
     selector: 'app-scheduler',
@@ -24,9 +26,10 @@ export class SchedulerComponent {
         private filePath: FilePath,
         private navParams: NavParams,
         private callNumber: CallNumber,
-        private toast: Toast
+        private toast: Toast,
+        private tts: TextToSpeech
     ) {
-        this.retrieveFilePath();
+        // this.retrieveFilePath();
         this.id = this.navParams.get('id');
         if (!this.id) {
             this.isEdit = false;
@@ -61,7 +64,7 @@ export class SchedulerComponent {
         return '' + _year + '-' + _month + '-' + _date + 'T' + time + ':00Z';
     }
 
-    retrieveFilePath(path?: string) {
+    /* retrieveFilePath(path?: string) {
         const str = path || 'file:///storage/emulated/0/detective.mp3';
         this.filePath.resolveNativePath(str)
             .then(result => {
@@ -69,7 +72,7 @@ export class SchedulerComponent {
             }, error => {
                 console.log(error);
             });
-    }
+    } */
 
     generateID() {
         return (Date.now() + Math.ceil(Math.random() * 1000));
@@ -79,7 +82,6 @@ export class SchedulerComponent {
         const notificationObj = {
             id: this.id ? this.id : this.generateID(),
             text: text,
-            sound: 'file:///storage/emulated/0/detective.mp3',
             data: { number: this.phone, name: this.name, actualTxt: actualTxt },
             trigger: { at: date },
             vibrate: true,
@@ -98,14 +100,19 @@ export class SchedulerComponent {
     setReminder() {
         const notificationTxt = this.notificationText ? 'Call ' + this.name + ': ' + this.notificationText : 'Call ' + this.name;
         const selectedDate = new Date(this.alertDate.replace(/[TZ]/g, ' '));
+        let speechTxt = '';
         let successMsg;
         if (this.id) {
             successMsg = 'Reminder updated successfully!';
+            speechTxt = 'Reminder for calling' + this.name + 'updated successfully.';
         } else {
             successMsg = 'Reminder scheduled successfully!';
+            speechTxt = 'Reminder set to call ' + this.name + 'on ' + selectedDate.toDateString();
         }
         this.scheduleNotification(notificationTxt, selectedDate, this.notificationText);
-
+        this.tts.speak(speechTxt)
+            .then(() => console.log('Success'))
+            .catch((reason: any) => console.log(reason));
         // Non intrusive alert.
         this.toast.show(successMsg, '3000', 'center').subscribe(toast => {
             setTimeout(() => {
