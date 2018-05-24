@@ -83,7 +83,17 @@ export class VoiceAssistantComponent {
                 let q = time.toLowerCase().indexOf('night');
                 let r = time.toLowerCase().indexOf('morning'); */
         if (x > -1) {
-            this.scheduleTime = '' + (Number(time.substring(0, x)) + 12);
+            let eveTime = time.substring(0, x);
+            const eveTimeLen = eveTime.split(':').length;
+            if (eveTimeLen > 1) {
+                this.scheduleTime = '' + (Number(eveTime.split(':')[0]) + 12) + ':' + eveTime.split(':')[1];
+            }
+            // const val = Number(time.substring(0, x));
+            else if (eveTime === '12') {
+                this.scheduleTime = '' + eveTime;
+            } else {
+                this.scheduleTime = '' + (eveTime + 12);
+            }
         } else if (y > -1) {
             this.scheduleTime = time.substring(0, y);
         }
