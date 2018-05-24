@@ -8,7 +8,7 @@ import { Toast } from '@ionic-native/toast';
 import { AlertController } from 'ionic-angular';
 import { SMS } from '@ionic-native/sms';
 import { SearchContactComponent } from '../searchContact/search.contact.component';
-
+import { SpeechRecognition } from '@ionic-native/speech-recognition';
 @Component({
     selector: 'app-relationship-manager',
     templateUrl: 'relationshipManagerComponent.html'
@@ -22,7 +22,8 @@ export class RelationshipManagerComponent {
         private callNumber: CallNumber,
         private toast: Toast,
         private alertCtrl: AlertController,
-        private sms: SMS
+        private sms: SMS,
+        private speechRecognition: SpeechRecognition
     ) { }
 
     goToScheduler() {
@@ -92,6 +93,12 @@ export class RelationshipManagerComponent {
 
     ionViewWillEnter() {
         this.getAllCalls();
+    }
+
+    ionViewWillLeave() {
+        this.speechRecognition.stopListening().then(() => {
+            console.log('stopped');
+        })
     }
 
     getAllCalls() {
