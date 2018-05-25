@@ -4,6 +4,9 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { FilePath } from '@ionic-native/file-path';
 import { CallNumber } from '@ionic-native/call-number';
 import { Toast } from '@ionic-native/toast';
+import { TextToSpeech } from '@ionic-native/text-to-speech';
+import { Constants } from '../constants';
+import { Helpers } from '../Helpers';
 
 @Component({
     selector: 'app-scheduler',
@@ -24,15 +27,18 @@ export class SchedulerComponent {
         private filePath: FilePath,
         private navParams: NavParams,
         private callNumber: CallNumber,
-        private toast: Toast
+        private toast: Toast,
+        private tts: TextToSpeech,
+        private constants: Constants,
+        private helpers: Helpers
     ) {
-        this.retrieveFilePath();
+        // this.retrieveFilePath();
         this.id = this.navParams.get('id');
         if (!this.id) {
             this.isEdit = false;
             this.name = this.navParams.get('name');
             this.phone = this.navParams.get('phone');
-            this.alertDate = this.dateHelper(new Date());
+            this.alertDate = this.helpers.isoConverter(new Date());
         } else {
             this.isEdit = true;
             this.localNotifications.get(this.id).then(obj => {
@@ -48,20 +54,10 @@ export class SchedulerComponent {
         this.name = details.name;
         this.phone = details.number;
         this.notificationText = details.actualTxt;
-        this.alertDate = this.dateHelper(data.trigger.at);
+        this.alertDate = this.helpers.isoConverter(data.trigger.at);
     }
 
-    dateHelper(date: any) {
-        const val = new Date(date);
-        const time = val.toTimeString().substring(0, 5);
-        const month = val.getMonth() + 1;
-        const _month = month < 9 ? '0' + month : month;
-        const _date = val.getDate() < 9 ? '0' + val.getDate() : val.getDate();
-        const _year = val.getFullYear();
-        return '' + _year + '-' + _month + '-' + _date + 'T' + time + ':00Z';
-    }
-
-    retrieveFilePath(path?: string) {
+    /* retrieveFilePath(path?: string) {
         const str = path || 'file:///storage/emulated/0/detective.mp3';
         this.filePath.resolveNativePath(str)
             .then(result => {
@@ -69,17 +65,12 @@ export class SchedulerComponent {
             }, error => {
                 console.log(error);
             });
-    }
-
-    generateID() {
-        return (Date.now() + Math.ceil(Math.random() * 1000));
-    }
+    } */
 
     scheduleNotification(text: string, date: Date, actualTxt: string) {
         const notificationObj = {
-            id: this.id ? this.id : this.generateID(),
+            id: this.id ? this.id : this.helpers.generateID(),
             text: text,
-            sound: 'file:///storage/emulated/0/detective.mp3',
             data: { number: this.phone, name: this.name, actualTxt: actualTxt },
             trigger: { at: date },
             vibrate: true,
@@ -98,14 +89,19 @@ export class SchedulerComponent {
     setReminder() {
         const notificationTxt = this.notificationText ? 'Call ' + this.name + ': ' + this.notificationText : 'Call ' + this.name;
         const selectedDate = new Date(this.alertDate.replace(/[TZ]/g, ' '));
+        let speechTxt = '';
         let successMsg;
         if (this.id) {
-            successMsg = 'Reminder updated successfully!';
+            successMsg = this.constants.reminderUpdateSuccess;
+            speechTxt = 'Reminder for calling' + this.name + 'updated successfully.';
         } else {
-            successMsg = 'Reminder scheduled successfully!';
+            successMsg = this.constants.reminderSuccess;
+            speechTxt = 'Reminder set to call ' + this.name;
         }
         this.scheduleNotification(notificationTxt, selectedDate, this.notificationText);
-
+        this.tts.speak(speechTxt)
+            .then(() => console.log('Success'))
+            .catch((reason: any) => console.log(reason));
         // Non intrusive alert.
         this.toast.show(successMsg, '3000', 'center').subscribe(toast => {
             setTimeout(() => {

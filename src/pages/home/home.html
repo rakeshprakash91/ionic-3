@@ -5,6 +5,7 @@
 </ion-header>
 
 <ion-content padding>
+  <app-voice-assistant></app-voice-assistant>
   <ion-card>
     <ion-card-header>
       <ion-icon name="md-heart-outline"></ion-icon>
@@ -29,7 +30,7 @@
       <div *ngIf="banList">
         {{banList}}
         <div>
-          <button ion-button color="danger" round outline (click)="banList = ''">Clear</button>
+          <button ion-button color="danger" round outline (click)="banList=''">Clear</button>
         </div>
       </div>
     </ion-card-content>

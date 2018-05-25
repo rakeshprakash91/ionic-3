@@ -2,11 +2,9 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
-
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpClientModule } from '@angular/common/http';
@@ -24,6 +22,11 @@ import { SMS } from '@ionic-native/sms';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
 import { LocationManagerComponent } from '../pages/locationManager/location.manager.component';
 import { SearchContactComponent } from '../pages/searchContact/search.contact.component';
+import { TextToSpeech } from '@ionic-native/text-to-speech';
+import { SpeechRecognition } from '@ionic-native/speech-recognition';
+import { VoiceAssistantComponent } from '../pages/voiceAssistant/voice.assistant.compoenent';
+import { Helpers } from '../pages/Helpers';
+import { Constants } from '../pages/constants';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,8 @@ import { SearchContactComponent } from '../pages/searchContact/search.contact.co
     SchedulerComponent,
     RelationshipManagerComponent,
     LocationManagerComponent,
-    SearchContactComponent
+    SearchContactComponent,
+    VoiceAssistantComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +56,8 @@ import { SearchContactComponent } from '../pages/searchContact/search.contact.co
     SchedulerComponent,
     RelationshipManagerComponent,
     LocationManagerComponent,
-    SearchContactComponent
+    SearchContactComponent,
+    VoiceAssistantComponent
   ],
   providers: [
     SMS,
@@ -62,10 +67,14 @@ import { SearchContactComponent } from '../pages/searchContact/search.contact.co
     Contacts,
     StatusBar,
     CallNumber,
+    TextToSpeech,
     SplashScreen,
     NativeGeocoder,
+    SpeechRecognition,
     LocalNotifications,
     BackgroundGeolocation,
+    Helpers,
+    Constants,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
