@@ -25,6 +25,8 @@ import { SearchContactComponent } from '../pages/searchContact/search.contact.co
 import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { SpeechRecognition } from '@ionic-native/speech-recognition';
 import { VoiceAssistantComponent } from '../pages/voiceAssistant/voice.assistant.compoenent';
+import { Helpers } from '../pages/Helpers';
+import { Constants } from '../pages/constants';
 
 @NgModule({
   declarations: [
@@ -71,6 +73,8 @@ import { VoiceAssistantComponent } from '../pages/voiceAssistant/voice.assistant
     SpeechRecognition,
     LocalNotifications,
     BackgroundGeolocation,
+    Helpers,
+    Constants,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
