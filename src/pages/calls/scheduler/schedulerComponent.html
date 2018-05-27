@@ -1,0 +1,31 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Scheduler</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-card>
+        <ion-card-header>
+            <div>
+                Set Reminder for {{name}}
+            </div>
+            <div>{{phone}}</div>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-list>
+                <ion-item>
+                    <ion-label floating>Notification Message</ion-label>
+                    <ion-input type="text" [(ngModel)]="notificationText"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label floating>Date</ion-label>
+                    <ion-datetime displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="alertDate"></ion-datetime>
+                </ion-item>
+            </ion-list>
+            <div>
+                <button ion-button color="primary" round outline (click)="setReminder()">Set Reminder</button>
+            </div>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

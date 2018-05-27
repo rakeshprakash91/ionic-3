@@ -2,8 +2,8 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Contacts, Contact, ContactField, ContactName } from '@ionic-native/contacts';
 import { SchedulerComponent } from '../scheduler/schedulerComponent';
-import { ScheduleListComponent } from '../scheduleList/scheduleList.component';
-import { Helpers } from '../Helpers';
+import { Helpers } from '../../Helpers';
+
 
 @Component({
     selector: 'app-search-contact',

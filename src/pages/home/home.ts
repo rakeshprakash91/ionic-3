@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
-import { RelationshipManagerComponent } from '../relationshipManager/relationshipManagerComponent';
-import { LocationManagerComponent } from '../locationManager/location.manager.component';
+import { RelationshipManagerComponent } from '../calls/relationshipManager/relationshipManagerComponent';
+import { LocationManagerComponent } from '../location/locationManager/location.manager.component';
 
 @Component({
   selector: 'page-home',
