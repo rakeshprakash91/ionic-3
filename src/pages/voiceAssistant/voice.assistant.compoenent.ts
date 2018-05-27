@@ -6,9 +6,9 @@ import { AlertController } from 'ionic-angular';
 import * as _ from 'underscore';
 import { Contacts } from '@ionic-native/contacts';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { RelationshipManagerComponent } from '../relationshipManager/relationshipManagerComponent';
 import { Helpers } from '../Helpers';
 import { Constants } from '../constants';
+import { RelationshipManagerComponent } from '../calls/relationshipManager/relationshipManagerComponent';
 
 @Component({
     selector: 'app-voice-assistant',
